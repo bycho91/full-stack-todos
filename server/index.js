@@ -16,8 +16,8 @@ app.post("/todos", async (req, res) => {
   try {
     const { description } = req.body;
     const newTodo = await pool.query(
-      "INSERT INTO todos (description) VALUES($1) RETURNING *",
-      [description]
+      "INSERT INTO todos (description, done) VALUES($1, $2) RETURNING *",
+      [description, "FALSE"]
     );
     res.json(newTodo.rows[0]);
   } catch (err) {
@@ -28,7 +28,7 @@ app.post("/todos", async (req, res) => {
 // Get all Todos
 app.get("/todos", async (req, res) => {
   try {
-    const allTodos = await pool.query("SELECT * FROM todos");
+    const allTodos = await pool.query("SELECT * FROM todos ORDER BY todo_id");
     res.json(allTodos.rows);
   } catch (err) {
     console.error(err.message);
@@ -58,6 +58,20 @@ app.put("/todos/:id", async (req, res) => {
       [description, id]
     );
     res.json(updatedTodo.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// Update Todo: toggle completed
+app.patch("/todos/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const doneTodo = await pool.query(
+      "UPDATE todos SET done = NOT done WHERE todo_id=$1 RETURNING *",
+      [id]
+    );
+    res.json(doneTodo);
   } catch (err) {
     console.error(err.message);
   }

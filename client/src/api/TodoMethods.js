@@ -21,3 +21,23 @@ export const getAllTodos = async () => {
     console.error(err.message);
   }
 };
+
+// UPDATE a todo
+export const completeTodo = async (id) => {
+  try {
+    const data = await axios.patch(`${URL}/todos/${id}`);
+    return data;
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
+// DELETE a todo
+export const deleteTodo = async (id) => {
+  try {
+    const deleted = await axios.delete(`${URL}/todos/${id}`);
+    return deleted;
+  } catch (err) {
+    console.error(err.message);
+  }
+};
