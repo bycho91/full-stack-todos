@@ -14,7 +14,7 @@ const TodoList = () => {
   console.log(todos);
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", marginBottom: "1em" }}>
       {todos && todos.map((todo) => <TodoItem todo={todo} />)}
     </Box>
   );
