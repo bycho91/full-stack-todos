@@ -31,6 +31,7 @@ const InputBar = () => {
         gap: ".5em",
         justifyContent: "center",
         marginBottom: "1em",
+        position: "relative",
       }}
     >
       <form
@@ -39,13 +40,20 @@ const InputBar = () => {
       >
         <Input
           variant="outlined"
-          placeholder="type a task.."
+          placeholder="add a todo..."
           {...register("task", { required: true })}
           color="success"
           sx={{ width: "300px", padding: ".3em" }}
         />
         {errors.task && (
-          <div style={{ position: "absolute", top: "50%", color: "red" }}>
+          <div
+            style={{
+              position: "absolute",
+              top: "40px",
+              color: "red",
+              fontSize: ".7rem",
+            }}
+          >
             This field is required
           </div>
         )}
