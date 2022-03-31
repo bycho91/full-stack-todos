@@ -22,6 +22,18 @@ export const getAllTodos = async () => {
   }
 };
 
+// EDIT a todo
+export const editTodo = async (id, newDesc) => {
+  try {
+    const data = await axios.put(`${URL}/todos/${id}`, {
+      description: newDesc,
+    });
+    return data;
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
 // UPDATE a todo
 export const completeTodo = async (id) => {
   try {

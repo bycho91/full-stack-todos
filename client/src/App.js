@@ -1,8 +1,33 @@
 import { Container, Typography } from "@mui/material";
 import InputBar from "./components/InputBar";
 import TodoList from "./components/TodoList";
+import { useQueryClient, useMutation } from "react-query";
+import { addTodo, deleteTodo, editTodo } from "./api/TodoMethods";
 
 function App() {
+  const queryClient = useQueryClient();
+
+  const { mutateAsync: mutateAdd } = useMutation(
+    (newTodo) => addTodo(newTodo),
+    {
+      onSuccess: queryClient.invalidateQueries("todos"),
+      onError: (err) => console.log(err),
+    }
+  );
+
+  const { mutateAsync: mutateDelete } = useMutation((id) => deleteTodo(id), {
+    onSuccess: queryClient.invalidateQueries("todos"),
+    onError: (err) => console.log(err),
+  });
+
+  const { mutateAsync: mutateEdit } = useMutation(
+    (id, newDes) => editTodo(id, newDes),
+    {
+      onSuccess: queryClient.invalidateQueries("todos"),
+      onError: (err) => console.log(err),
+    }
+  );
+
   return (
     <div className="app">
       <Container
@@ -24,8 +49,8 @@ function App() {
         >
           PERN.TODO
         </Typography>
-        <InputBar />
-        <TodoList />
+        <InputBar mutateAdd={mutateAdd} />
+        <TodoList mutateDelete={mutateDelete} mutateEdit={mutateEdit} />
       </Container>
     </div>
   );

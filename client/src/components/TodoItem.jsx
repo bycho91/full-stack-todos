@@ -1,28 +1,42 @@
-import { Box, Typography, IconButton, Checkbox } from "@mui/material";
+import {
+  Box,
+  Typography,
+  IconButton,
+  Checkbox,
+  Input,
+  Button,
+} from "@mui/material";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { AiOutlineEdit } from "react-icons/ai";
-import { useQueryClient, useMutation, useQuery } from "react-query";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "react-query";
+import { useEffect, useState } from "react";
 import { completeTodo, deleteTodo } from "../api/TodoMethods";
+import EditModal from "./EditModal";
 
-const TodoItem = ({ todo: { todo_id, description, done } }) => {
+const TodoItem = ({
+  todo: { todo_id, description, done },
+  mutateDelete,
+  mutateEdit,
+}) => {
   const [completed, setCompleted] = useState(done);
+  const [modal, setModal] = useState(false);
 
   const queryClient = useQueryClient();
-  const { mutateAsync: mutateDelete } = useMutation((id) => deleteTodo(id), {
-    onSuccess: queryClient.invalidateQueries("todos"),
-    onError: (err) => console.log(err),
-  });
+  useEffect(() => {
+    queryClient.invalidateQueries("todos");
+  }, [modal]);
 
   const handleDelete = () => {
     mutateDelete(todo_id);
   };
-  const handleEdit = () => {};
 
   const handleCheck = () => {
     setCompleted(!completed);
     completeTodo(todo_id);
+  };
+
+  const handleModalClose = () => {
+    setModal(false);
   };
 
   return (
@@ -43,6 +57,7 @@ const TodoItem = ({ todo: { todo_id, description, done } }) => {
       >
         <Checkbox onChange={handleCheck} />
         <p>{todo_id}</p>
+
         <Typography
           variant="h5"
           sx={{ textDecoration: completed ? "line-through" : "none" }}
@@ -56,13 +71,28 @@ const TodoItem = ({ todo: { todo_id, description, done } }) => {
           alignItems: "center",
         }}
       >
-        <IconButton variant="text" color="secondary">
+        <IconButton
+          variant="text"
+          color="secondary"
+          disabled={completed}
+          onClick={() => setModal(true)}
+        >
           <AiOutlineEdit size="1.5rem" />
         </IconButton>
         <IconButton variant="text" color="warning" onClick={handleDelete}>
           <RiDeleteBin6Line size="1.5rem" />
         </IconButton>
       </Box>
+      {modal && (
+        <EditModal
+          modal={modal}
+          setModal={setModal}
+          handleClose={handleModalClose}
+          description={description}
+          id={todo_id}
+          mutateEdit={mutateEdit}
+        />
+      )}
     </Box>
   );
 };

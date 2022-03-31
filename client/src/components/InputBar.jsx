@@ -1,9 +1,9 @@
 import { Box, Input, Typography, Button } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { addTodo } from "../api/TodoMethods";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
 
-const InputBar = () => {
+const InputBar = ({ mutateAdd }) => {
   const {
     register,
     handleSubmit,
@@ -11,14 +11,13 @@ const InputBar = () => {
     reset,
   } = useForm();
 
-  const queryClient = useQueryClient();
-  const { mutateAsync } = useMutation((newTodo) => addTodo(newTodo), {
-    onSuccess: queryClient.invalidateQueries("todos"),
-    onError: (err) => console.log(err),
-  });
+  // const { mutateAsync } = useMutation((newTodo) => addTodo(newTodo), {
+  //   onSuccess: queryClient.invalidateQueries("todos"),
+  //   onError: (err) => console.log(err),
+  // });
 
   const onSubmit = async (data) => {
-    mutateAsync(data.task);
+    mutateAdd(data.task);
     reset();
   };
 
