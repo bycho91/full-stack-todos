@@ -34,7 +34,7 @@ export const editTodo = async (id, newDesc) => {
   }
 };
 
-// UPDATE a todo
+// COMPLETE a todo
 export const completeTodo = async (id) => {
   try {
     const data = await axios.patch(`${URL}/todos/${id}`);

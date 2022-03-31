@@ -48,7 +48,7 @@ app.get("/todos/:id", async (req, res) => {
   }
 });
 
-// Update a Todo
+// EDIT a Todo
 app.put("/todos/:id", async (req, res) => {
   try {
     const { id } = req.params;

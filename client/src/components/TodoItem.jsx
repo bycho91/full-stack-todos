@@ -12,6 +12,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { useEffect, useState } from "react";
 import { completeTodo, deleteTodo } from "../api/TodoMethods";
 import EditModal from "./EditModal";
+import { motion } from "framer-motion";
 
 const TodoItem = ({
   todo: { todo_id, description, done },
@@ -47,6 +48,11 @@ const TodoItem = ({
         justifyContent: "space-between",
         borderBottom: "1px solid whitesmoke",
       }}
+      component={motion.div}
+      initial={{ opacity: 0, x: -100 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.5 }}
+      exit={{ opacity: 0, x: 100, transition: { duration: 0.5 } }}
     >
       <Box
         sx={{

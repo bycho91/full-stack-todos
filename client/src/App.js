@@ -47,7 +47,16 @@ function App() {
           my={3}
           fontWeight={800}
         >
-          PERN.TODO
+          <span
+            style={{
+              color: "orange",
+              fontWeight: "bold",
+              letterSpacing: ".1em",
+            }}
+          >
+            PERN
+          </span>
+          .TODO
         </Typography>
         <InputBar mutateAdd={mutateAdd} />
         <TodoList mutateDelete={mutateDelete} mutateEdit={mutateEdit} />
